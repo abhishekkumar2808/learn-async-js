@@ -5,7 +5,7 @@ const array2D = [
 ];
 
 
-function sum1DArray(arr) {
+async function sum1DArray(arr) {
     return new Promise((resolve, reject) => {
         console.log('Sum called ... ');
         if(Array.isArray(arr)) {
@@ -28,12 +28,17 @@ function sum1DArray(arr) {
     });
 }
 
-Promise.all(array2D.map((i) => sum1DArray(i) ))
-.then((sumArray) =>{
+    
 
-    let sum = 0;
-    for( let i = 0 ; i < sumArray.length; i++)
-        sum += sumArray[i];
 
-        console.log("sum: ", sum);
-})
+// Promise.all(array2D.map((i) => sum1DArray(i) ))
+// .then((sumArray) =>{
+//     let sum = 0;
+//     for( let i = 0 ; i < sumArray.length; i++)
+//         sum += sumArray[i];
+
+//     console.log("sum: ", sum);
+// })
+// .catch((err) =>{
+//     console.log("error: ", err)
+// })
