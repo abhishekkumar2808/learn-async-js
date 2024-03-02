@@ -5,40 +5,52 @@ const array2D = [
 ];
 
 
-async function sum1DArray(arr) {
-    return new Promise((resolve, reject) => {
-        console.log('Sum called ... ');
-        if(Array.isArray(arr)) {
-            setTimeout(() => {
-                let sum = 0;
-                for (let i = 0; i < arr.length; i++) {
-
-                        sum += arr[i];
-
-                }
-                console.log('resolving ... ');
-                resolve(sum);
-            }, 0);
-        }
-        else {
-            console.log('rejecting ... ');
-            reject('BAD INPUT: Expected array as input');
-        }
-        console.log('returning from sum');
-    });
+// Function to sum the elements of a row
+async function sumRow(row) {
+    if (!Array.isArray(row)) {
+        throw new Error('BAD INPUT: Expected array as input');
+    }
+    
+    const rowSum = row.reduce((acc, curr) => acc + curr, 0);
+    console.log("Row sum :"+row+" SUM:"+rowSum);
+    return rowSum;
 }
+
+// Function to sum all rows concurrently
+async function sumAllRows(arr) {
+    if (!Array.isArray(arr)) {
+        throw new Error('BAD INPUT: Expected array as input');
+    }
+
+    let totalSum = 0;
+
+    // Calculate the sum of each row concurrently
+    for (const row of arr) {
+        try {
+            const rowSum = await sumRow(row);
+            //u can do await Promise.all(rowSumPromises)
+            //sir returned promise instead in class
+            console.log("Row executed :"+row);
+            totalSum += rowSum;
+        } catch (error) {
+            console.error('Error in sumRow:', error);
+        }
+    }
+
+    return totalSum;
+}
+
+
+async function main() {
+    try {
+        const sum = await sumAllRows(array2D);
+        console.log('Total sum:', sum);
+    } catch (error) {
+        console.error('Error:', error.message);
+    }
+}
+
+main();
 
     
 
-
-// Promise.all(array2D.map((i) => sum1DArray(i) ))
-// .then((sumArray) =>{
-//     let sum = 0;
-//     for( let i = 0 ; i < sumArray.length; i++)
-//         sum += sumArray[i];
-
-//     console.log("sum: ", sum);
-// })
-// .catch((err) =>{
-//     console.log("error: ", err)
-// })
