@@ -1,1 +1,5 @@
 Explain the code execution based on the order of the messages logged in src/quiz/promise-2darray.txt.
+
+- Console log of sumPromise1 is printed first followed by console log of sumPromise2 before the result of sumPromise1 is printed in the output becasue the computation takes time.
+- Hence, the computation is done in async manner.
+- So, output of the sumPromise1 is printed first and then followed by the output of sumPromise2.

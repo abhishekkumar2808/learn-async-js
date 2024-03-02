@@ -1,40 +1,52 @@
+// Example usage:
 const array2D = [
     [1, 2, 3],
     [4, 5, 6],
     [7, 8, -9]
 ];
 
-function negPerRow(arr) {
+function checkForNegatives(arr) {
     return new Promise((resolve, reject) => {
-        console.log('Sum called ... ');
-        if(Array.isArray(arr)) {
+        console.log('Checking for negatives... ');
+        if (Array.isArray(arr)) {
             setTimeout(() => {
-                let sum = 0;
-                for (let i = 0; i < arr.length; i++) {
+                // Create promises for checking each row
+                const rowPromises = arr.map((row, index) => {
+                    return new Promise((resolve, reject) => {
+                        // Check if any element in the row is negative
+                        if (row.some(num => num < 0)) {
+                            resolve(index); // Resolve with the row number
+                        } else {
+                            reject('No row contains negative numbers'); // Reject if no negatives found
+                        }
+                    });
+                });
 
-                        sum += arr[i];
-
-                }
-                console.log('resolving ... ');
-                resolve(sum);
+                // Use Promise.any() to resolve with the first fulfilled promise
+                Promise.any(rowPromises)
+                    .then(rowIndex => {
+                        // console.log('Row with negative number:', rowIndex);
+                        resolve(rowIndex);
+                    })
+                    .catch(error => {
+                        reject(error); // Reject with error message
+                    });
             }, 0);
-        }
-        else {
+        } else {
             console.log('rejecting ... ');
             reject('BAD INPUT: Expected array as input');
         }
-        console.log('returning from sum');
+        console.log('returning from checking for negatives');
     });
 }
 
-Promise.any(array2D.map((i) => sum1DArray(i) ))
-.then((sumArray) =>{
 
-    let sum = 0;
-    for( let i = 0 ; i < sumArray.length; i++)
-        sum += sumArray[i];
 
-        console.log("sum: ", sum);
-})
 
-//put a catch at the end of a then
+checkForNegatives(array2D)
+    .then(rowIndex => {
+        console.log('Row index with negative number:', rowIndex);
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
